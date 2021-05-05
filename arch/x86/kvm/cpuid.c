@@ -25,11 +25,16 @@
 #include "trace.h"
 #include "pmu.h"
 
+// for assignement 2
 u64 exit_counts = 0;
 u64 exit_delta = 0;
 EXPORT_SYMBOL(exit_counts);
 EXPORT_SYMBOL(exit_delta);
 
+
+// declare of exit types for assignment 3
+atomic64_t exit_entries[69]= {0};
+EXPORT_SYMBOL(exit_entries);
 
 /*
  * Unlike "struct cpuinfo_x86.x86_capability", kvm_cpu_caps doesn't need to be
@@ -1233,7 +1238,27 @@ int kvm_emulate_cpuid(struct kvm_vcpu *vcpu)
 		eax = exit_counts;
 		ecx = exit_delta & 0xffffffff;
 		ebx = (exit_delta >> 32) & 0xffffffff;
-	} else {
+	}else if ( eax == 0x4ffffffe ) {
+		uint32_t s_count;
+		// if 0 <= ecx <= 68
+		if (ecx >= 0 && ecx <= 68 && ecx != 65 && ecx != 42 && ecx != 38 && ecx != 35){
+			if (eax == 3 || eax == 4 || eax == 5 || eax == 6 || eax == 16 || eax == 11 || eax == 17 || eax == 16 || eax == 33 || eax == 34 || eax == 51 || eax == 54 || eax == 63 || eax == 64 || eax == 66 || eax == 67 || eax == 68 ) {
+				printk(KERN_INFO "exit reason number=%u not enabled in KVM", ecx);
+				eax = ebx = ecx = edx = 0;
+			} else {
+				// return exit count
+				eax = atomic64_read(&exit_entries[ecx]);
+				printk(KERN_INFO "exit reason number=%u, exit counter eax=%u", ecx, eax);
+				s_count = atomic64_read(&exit_entries[ecx]);
+				printk(KERN_INFO "exit number %d exits= %d\n", ecx, s_count);
+			}
+		} else {
+			// exit not defined
+			printk(KERN_INFO "exit reason number=%u not defined in SDM", ecx);
+			eax = ebx = ecx = 0;
+			edx = 0xFFFFFFFF;
+		}
+	}else {
 		kvm_cpuid(vcpu, &eax, &ebx, &ecx, &edx, false);
 	}
 	kvm_cpuid(vcpu, &eax, &ebx, &ecx, &edx, false);
