@@ -64,8 +64,15 @@
 #include "vmx.h"
 #include "x86.h"
 
+#include <asm/atomic.h>
+#include <asm/atomic64_64.h>
+#include <asm/msr.h>
+
 extern u64 exit_counts;
 extern u64 exit_delta;
+
+/* assignement3 */
+extern atomic64_t exit_counter[69];
 
 MODULE_AUTHOR("Qumranet");
 MODULE_LICENSE("GPL");
@@ -5974,6 +5981,10 @@ static int __vmx_handle_exit(struct kvm_vcpu *vcpu, fastpath_t exit_fastpath)
 	u16 exit_handler_index;
 	
 	exit_counts++;
+	
+	if (exit_reason.full < 69) {
+		atomic64_inc(&exit_counter[exit_reason.full]);
+	}
 
 	/*
 	 * Flush logged GPAs PML buffer, this will make dirty_bitmap more
