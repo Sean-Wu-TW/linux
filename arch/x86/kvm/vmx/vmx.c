@@ -5982,9 +5982,9 @@ static int __vmx_handle_exit(struct kvm_vcpu *vcpu, fastpath_t exit_fastpath)
 	
 	exit_counts++;
 	
-	if (exit_reason.full < 69) {
-		atomic64_inc(&exit_counter[exit_reason.full]);
-	}
+// 	if (exit_reason.full < 69) {
+// 		atomic64_inc(&exit_counter[exit_reason.full]);
+// 	}
 
 	/*
 	 * Flush logged GPAs PML buffer, this will make dirty_bitmap more
