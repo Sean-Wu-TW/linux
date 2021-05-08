@@ -72,7 +72,7 @@ extern u64 exit_counts;
 extern u64 exit_delta;
 
 /* assignement3 */
-extern u32 exit_counter[70];
+u32 exit_counter[70];
 
 MODULE_AUTHOR("Qumranet");
 MODULE_LICENSE("GPL");
