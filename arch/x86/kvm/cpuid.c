@@ -33,7 +33,7 @@ EXPORT_SYMBOL(exit_delta);
 
 
 // declare of exit types for assignment 3
-extern u32 exit_counter[69];
+extern u32 exit_counter[70];
 EXPORT_SYMBOL(exit_counter);
 
 /*
