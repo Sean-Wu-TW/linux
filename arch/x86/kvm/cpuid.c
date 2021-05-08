@@ -33,7 +33,7 @@ EXPORT_SYMBOL(exit_delta);
 
 
 // declare of exit types for assignment 3
-atomic64_t exit_entries[69]= {0};
+u32 exit_entries[69]= {0};
 EXPORT_SYMBOL(exit_entries);
 
 /*
@@ -1231,6 +1231,7 @@ int kvm_emulate_cpuid(struct kvm_vcpu *vcpu)
 
 	eax = kvm_rax_read(vcpu);
 	ecx = kvm_rcx_read(vcpu);
+	kvm_cpuid(vcpu, &eax, &ebx, &ecx, &edx, false);
 	
 	if (eax == 0x4fffffff){
 		printk("Now in 0x4ffffff");
@@ -1247,7 +1248,8 @@ int kvm_emulate_cpuid(struct kvm_vcpu *vcpu)
 				eax = ebx = ecx = edx = 0;
 			} else {
 				// return exit count
-				eax = atomic64_read(&exit_entries[ecx]);
+				// eax = atomic64_read(&exit_entries[ecx]);
+				eax = exit_entries[ecx];
 				printk(KERN_INFO "exit reason number=%u, exit counter eax=%u", ecx, eax);
 				s_count = atomic64_read(&exit_entries[ecx]);
 				printk(KERN_INFO "exit number %d exits= %d\n", ecx, s_count);
@@ -1261,7 +1263,7 @@ int kvm_emulate_cpuid(struct kvm_vcpu *vcpu)
 	}else {
 		kvm_cpuid(vcpu, &eax, &ebx, &ecx, &edx, false);
 	}
-	kvm_cpuid(vcpu, &eax, &ebx, &ecx, &edx, false);
+	
 	kvm_rax_write(vcpu, eax);
 	kvm_rbx_write(vcpu, ebx);
 	kvm_rcx_write(vcpu, ecx);
