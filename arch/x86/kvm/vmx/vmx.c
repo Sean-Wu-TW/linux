@@ -72,7 +72,7 @@ extern u64 exit_counts;
 extern u64 exit_delta;
 
 /* assignement3 */
-extern atomic64_t exit_counter[69];
+u32 exit_counter[69];
 
 MODULE_AUTHOR("Qumranet");
 MODULE_LICENSE("GPL");
@@ -5980,7 +5980,7 @@ static int __vmx_handle_exit(struct kvm_vcpu *vcpu, fastpath_t exit_fastpath)
 	u32 vectoring_info = vmx->idt_vectoring_info;
 	u16 exit_handler_index;
 	
-	exit_counts++;
+	// exit_counts++;
 	
 // 	if (exit_reason.full < 69) {
 // 		atomic64_inc(&exit_counter[exit_reason.full]);
@@ -6136,6 +6136,7 @@ static int __vmx_handle_exit(struct kvm_vcpu *vcpu, fastpath_t exit_fastpath)
 
 	exit_handler_index = array_index_nospec((u16)exit_reason.basic,
 						kvm_vmx_max_exit_handlers);
+	exit_counter[exit_handler_index]++;
 	if (!kvm_vmx_exit_handlers[exit_handler_index])
 		goto unexpected_vmexit;
 
