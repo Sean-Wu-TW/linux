@@ -33,7 +33,7 @@ EXPORT_SYMBOL(exit_delta);
 
 
 // declare of exit types for assignment 3
-u32 exit_counter[70];
+extern u32 exit_counter[70];
 
 
 /*
@@ -1247,12 +1247,13 @@ int kvm_emulate_cpuid(struct kvm_vcpu *vcpu)
 				printk(KERN_INFO "exit reason number=%u not enabled in KVM", ecx);
 				eax = ebx = ecx = edx = 0;
 			} else {
+				printk("Indise 0x4ffffffe");
 				// return exit count
 				// eax = atomic64_read(&exit_counter[ecx]);
-				eax = exit_counter[ecx];
-				printk(KERN_INFO "exit reason number=%u, exit counter eax=%u", ecx, eax);
-				s_count = exit_counter[ecx];
-				printk(KERN_INFO "exit number %d exits= %d\n", ecx, s_count);
+// 				eax = exit_counter[ecx];
+// 				printk(KERN_INFO "exit reason number=%u, exit counter eax=%u", ecx, eax);
+// 				s_count = exit_counter[ecx];
+// 				printk(KERN_INFO "exit number %d exits= %d\n", ecx, s_count);
 			}
 		} else {
 			// exit not defined
