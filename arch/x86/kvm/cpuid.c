@@ -34,7 +34,7 @@ EXPORT_SYMBOL(exit_delta);
 
 // declare of exit types for assignment 3
 u32 exit_counter[70];
-EXPORT_SYMBOL(exit_counter);
+
 
 /*
  * Unlike "struct cpuinfo_x86.x86_capability", kvm_cpu_caps doesn't need to be
