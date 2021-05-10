@@ -1249,9 +1249,9 @@ int kvm_emulate_cpuid(struct kvm_vcpu *vcpu)
 				eax = ebx = ecx = edx = 0;
 			} else {
 				// return exit count
-				eax = &exit_counter[ecx];
+				eax = exit_counter[ecx];
 				printk(KERN_INFO "exit reason number=%u, exit counter eax=%u", ecx, eax);
-				s_count = &exit_counter[ecx];
+				s_count = exit_counter[ecx];
 				printk(KERN_INFO "exit number %d exits= %d\n", ecx, s_count);
 			}
 		} else {
